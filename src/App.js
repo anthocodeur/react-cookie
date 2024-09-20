@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useCookies } from "react-cookie";
+import Bandeau from "./components/Bandeau";
 
 function App() {
+  const [cookie, setCookie, removeCookie] = useCookies(["user"]);
+
+  const handleClickAddCookie = () => {
+    // On va faire un fetch de login et récupérer data
+    // fetch(url, {options})
+    setCookie(
+      "user",
+      {
+        name: "John",
+        surname: "Antho",
+        age: 25,
+      }, // Ici on place les data en lieu et place de l'objet de démo
+      { path: "/", maxAge: 604800 }
+    );
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      {cookie.user ? <>Mon app</> : <h1>Pas de cookies</h1>}
+      <div>
+        <button onClick={handleClickAddCookie}>Ajouter le cookie</button>
+        <button
+          onClick={() => {
+            removeCookie("user");
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          Supprimer le cookie
+        </button>
+      </div>
+
+      {!cookie["user"] && <Bandeau />}
     </div>
   );
 }
